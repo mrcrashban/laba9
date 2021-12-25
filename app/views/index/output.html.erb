@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+      index_url= location.protocol + "//" + location.host + "/index/output.json"
+
+      function send_query() {
+          let btn = document.querySelector('#button');
+          btn.setAttribute('disabled', true);
+          let my_JSON_object = {};
+          const http_request = new XMLHttpRequest();
+          http_request.open("GET", index_url, true);
+          http_request.onreadystatechange = function () {
+              const done = 4, ok = 200;
+              if (http_request.readyState === done && http_request.status === ok) {
+                  my_JSON_object = JSON.parse(http_request.responseText);
+                  show_result(my_JSON_object);
+              }
+          };
+          http_request.send(null);
+          return false;
+      }
+
+      function show_result(data) {
+          let count = document.getElementById("count");
+          let result = document.getElementById("result");
+          count.innerHTML += "<br/>Итерация:" + "&nbsp;Результат:<br/>";
+          for (let i = 0; i<data.value_arr.length; ++i)
+              count.innerHTML += "&emsp;&emsp;" + (i+1) + "&emsp;&emsp;" + data.value_arr[i] + "<br/>";
+          result.innerHTML += "<br/>Факториал" + "&nbsp;1" + "&nbsp;2" + "&nbsp;3<br/>";
+          for (let j = 0; j<data.value_array.length; ++j)
+              result.innerHTML += "&emsp;&emsp;" + data.value_array[j] + "&emsp;&emsp;" + data.value_array2[j] + "&nbsp;" + (data.value_array2[j] + 1) + "&nbsp;" + (data.value_array2[j]+2) + "<br/>"
+      }
+
+  </script>
+</head>
+<body>
+<h2>
+  Существует гипотеза Симона о факториале. Она гласит, что существует
+  4 факториала, которые представимы в виде произведения трех<br/> последовательных
+  чисел. Например: 4! =2.3.4. Написать программу, определяющую эту четверку,
+  подсчитать действительное количество<br/> таких факториалов, если это возможно и
+  тем самым доказать неправильность гипотезы. Вывести на печать результаты
+  каждой итерации и финальных расчетов
+</h2>
+<input type = "submit" id="button" value = "Решение" onclick="return send_query();"/>
+<div id="count"></div>
+<div id="result"></div>
